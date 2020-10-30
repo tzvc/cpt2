@@ -12,7 +12,6 @@ export class GeoService {
         `https://us1.locationiq.com/v1/reverse.php?key=pk.9f59a4b05449c0995b1fe5be265bb831&lat=${lat}&lon=${lng}&namedetails=1&format=json`
       );
       const data = await res.json();
-      console.log(data);
       return {
         city: data.address.city,
         house_number: data.address.house_number ?? 13,

@@ -1,14 +1,14 @@
-#img {
-  display: block;
-  margin: auto;
-  height: 128px;
-  width: 128px;
-  padding: 2rem;
+body {
+  background-color: black;
+  height: 100%;
+  width: 90%;
+  margin: 10px;
 }
 
-#canvas {
-  display: block;
-  margin: 2rem auto;
-  width: 540px;
-  height: 540px;
+#console {
+  word-wrap: break-word;
+  color: white;
+  font-size: 0.7em;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

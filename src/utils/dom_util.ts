@@ -43,3 +43,20 @@ export function extractUserInfoFromURL() {
     throw new Error(e.message);
   }
 }
+
+export function overrideConsole() {
+  (function () {
+    var old = console.log;
+    var logger = document.getElementById('console');
+    console.log = function (message: any) {
+      if (typeof message == 'object') {
+        logger!.innerHTML +=
+          '<div>' +
+          (JSON && JSON.stringify ? JSON.stringify(message) : String(message)) +
+          '</div>';
+      } else {
+        logger!.innerHTML += '<div>' + message + '</div>';
+      }
+    };
+  })();
+}
