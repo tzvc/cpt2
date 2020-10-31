@@ -86,13 +86,29 @@ async function run() {
       city: placemark.city,
       zipcode: placemark.postcode,
     };
-    console.log(`Generating PDF...`);
-    const pdfBlob = await generatePdf(atInfos, REASONS);
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    console.log(`Generated PDF.`);
     console.log(`May the odds be in your favor.`);
-    const newWindow = window.open();
-    newWindow!.location.assign(pdfUrl);
+
+    const consoleElem = document.getElementById('console');
+    const regenerateButton = document.createElement('button');
+    regenerateButton.setAttribute('id', 'action-button');
+    regenerateButton.innerHTML = 'Regenerate';
+    regenerateButton.onclick = (e) => {
+      location.reload();
+    };
+
+    const openButton = document.createElement('button');
+    openButton.setAttribute('id', 'action-button');
+    openButton.innerHTML = 'Open';
+    openButton.onclick = async (e) => {
+      console.log(`Generating PDF...`);
+      const pdfBlob = await generatePdf(atInfos, REASONS);
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      console.log(`Generated PDF`);
+      console.log(`Opening PDF...`);
+      window.open(pdfUrl);
+    };
+    consoleElem?.appendChild(regenerateButton);
+    consoleElem?.appendChild(openButton);
   } catch (e) {
     console.error(`Error: ${e.message}`);
   }
