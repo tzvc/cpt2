@@ -89,9 +89,10 @@ async function run() {
     console.log(`Generating PDF...`);
     const pdfBlob = await generatePdf(atInfos, REASONS);
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl);
     console.log(`Generated PDF.`);
     console.log(`May the odds be in your favor.`);
+    const newWindow = window.open();
+    newWindow!.location.assign(pdfUrl);
   } catch (e) {
     console.error(`Error: ${e.message}`);
   }
