@@ -93,8 +93,9 @@ async function run() {
     console.log(`Generated PDF.`);
     console.log(`May the odds be in your favor.`);
   } catch (e) {
-    alert(e.message);
+    console.error(`Error: ${e.message}`);
   }
 }
+
 overrideConsole();
 run();

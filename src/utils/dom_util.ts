@@ -58,5 +58,16 @@ export function overrideConsole() {
         logger!.innerHTML += '<div>' + message + '</div>';
       }
     };
+
+    console.error = function (message: any) {
+      if (typeof message == 'object') {
+        logger!.innerHTML +=
+          '<div id="error">' +
+          (JSON && JSON.stringify ? JSON.stringify(message) : String(message)) +
+          '</div>';
+      } else {
+        logger!.innerHTML += '<div id="error">' + message + '</div>';
+      }
+    };
   })();
 }
