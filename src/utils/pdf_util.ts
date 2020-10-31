@@ -8,7 +8,7 @@ const ys = new Map([
   ['sante', 477],
   ['famille', 435],
   ['handicap', 396],
-  ['sport_animaux', 358],
+  ['sport_animaux', 356],
   ['convocation', 295],
   ['missions', 255],
   ['enfants', 211],
@@ -89,7 +89,7 @@ export async function generatePdf(infos: ATInfos, reason: string) {
   drawText(placeofbirth, 297, 674);
   drawText(`${address} ${zipcode} ${city}`, 133, 652);
 
-  drawText('x', 84, ys.get(reason)!, 18);
+  drawText('x', 78, ys.get(reason)!, 18);
 
   let locationSize = getIdealFontSize(font, infos.city, 83, 7, 11);
 
