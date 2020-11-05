@@ -1,3 +1,7 @@
+export type GeoLocation = {
+  lat: number;
+  lng: number;
+};
 /**
  * Generates number of random geolocation points given a center and a radius.
  * @param  {Object} center A JS object with lat and lng attributes.
@@ -5,7 +9,10 @@
  *                 If negative value is provided, points will be generated on exact distance (e.g. on circle border).
  * @return {Object} The generated random points as JS object with lat and lng attributes.
  */
-export const generateRandomPoint = (center: any, distance: number) => {
+export const generateRandomPoint = (
+  center: any,
+  distance: number
+): GeoLocation => {
   let lat = center.lat;
   let lng = center.lng;
   // Convert to radians
@@ -64,4 +71,20 @@ export const generateRandomPoint = (center: any, distance: number) => {
   nLng *= 180 / Math.PI;
 
   return {lat: nLat, lng: nLng};
+};
+
+export const getUserPosition = async (): Promise<GeoLocation> => {
+  const currPos = await new Promise<Position>((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve(pos),
+      (err) =>
+        reject(
+          new Error(
+            'Could not get current position. Please check your settings.'
+          )
+        ),
+      {enableHighAccuracy: true}
+    );
+  });
+  return {lat: currPos.coords.latitude, lng: currPos.coords.longitude};
 };

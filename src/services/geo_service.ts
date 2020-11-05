@@ -13,7 +13,7 @@ export class GeoService {
       );
       const data = await res.json();
       return {
-        city: data.address.city,
+        city: data.address.city ?? data.address.town,
         house_number: data.address.house_number ?? 13,
         postcode: data.address.postcode,
         road: data.address.road ?? data.address.pedestrian,

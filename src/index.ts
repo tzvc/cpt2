@@ -1,11 +1,17 @@
-import {GeoService} from './services/geo_service';
+import {GeoService, Placemark} from './services/geo_service';
 import {extractUserInfoFromURL, overrideConsole} from './utils/dom_util';
-import {generateRandomPoint} from './utils/geo_util';
+import {
+  generateRandomPoint,
+  GeoLocation,
+  getUserPosition,
+} from './utils/geo_util';
+import {sleep} from './utils/misc_utils';
 import {ATInfos, generatePdf} from './utils/pdf_util';
 
 const REASONS = 'sport_animaux';
 const CREATION_OFFSET = 20; // creation time offset, in meters
 const DISTANCE_OFFSET = 600; // distance offset in meter
+const MAX_RETRY_NB = 3;
 
 async function run() {
   try {
@@ -36,48 +42,54 @@ async function run() {
       `Generated fake creation date: ${creationDate} ${creationHour}`
     );
 
-    // TODO
-    // - get current location
-    // - get lat lng 600m from it
-    // - reverse geocode lat lng to get address
     console.log('Acquiring current user position...');
-    const currPos = await new Promise<Position>((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => resolve(pos),
-        (err) =>
-          reject(
-            new Error(
-              'Could not get current position. Please check your settings.'
-            )
-          ),
-        {enableHighAccuracy: true}
-      );
-    });
+    const currPos = await getUserPosition();
     console.log(
-      `Acquired user position: lat: ${currPos.coords.latitude} lng: ${currPos.coords.longitude}`
+      `Acquired user position: lat: ${currPos.lat} lng: ${currPos.lng}`
     );
 
-    console.log(
-      `Generating fake address location with offset ${DISTANCE_OFFSET} meters...`
-    );
-    const randomPos = generateRandomPoint(
-      {lat: currPos.coords.latitude, lng: currPos.coords.longitude},
-      DISTANCE_OFFSET
-    );
-    console.log(
-      `Generated address location: lat: ${randomPos.lat} lng: ${randomPos.lng} `
-    );
-    console.log(`Reverse geocoding new location...`);
-    const placemark = await GeoService.reverseGeocode(
-      randomPos.lat,
-      randomPos.lng
-    );
+    const getCurrentPlacemark = async (
+      currPos: GeoLocation
+    ): Promise<Placemark | null> => {
+      console.log(
+        `Generating fake address location with offset ${DISTANCE_OFFSET} meters...`
+      );
+      const randomPos = generateRandomPoint(currPos, DISTANCE_OFFSET);
+      console.log(
+        `Generated address location: lat: ${randomPos.lat} lng: ${randomPos.lng} `
+      );
+      console.log(`Reverse geocoding new location...`);
+
+      const placemark = await GeoService.reverseGeocode(
+        randomPos.lat,
+        randomPos.lng
+      );
+      console.debug(placemark);
+      if (!placemark.city || !placemark.postcode || !placemark.road)
+        return null; // gecoding is incomplete
+      return placemark;
+    };
+
+    let placemark = null;
+    for (let i = 0; i < MAX_RETRY_NB; i++) {
+      if (i > 0) {
+        console.log(
+          `Reverse geocoder yielded invalid placemark, trying again... Retry ${i}/${MAX_RETRY_NB -
+            1}`
+        );
+        await sleep(1000);
+      }
+      placemark = await getCurrentPlacemark(currPos);
+      if (placemark !== null) break;
+    }
+    if (placemark == null)
+      throw new Error('Could not get a valid placemark at the user location.');
+
     console.log(`Found address:`);
     console.log(`City: ${placemark.city}`);
     console.log(`Postcode: ${placemark.postcode}`);
     console.log(`House number: ${placemark.house_number}`);
     console.log(`Road: ${placemark.road}`);
-
     const atInfos: ATInfos = {
       ...userInfo,
       datesortie: creationDate,
