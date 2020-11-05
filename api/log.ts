@@ -1,4 +1,4 @@
-module.exports = (req, res) => {
+module.exports = (req: any, res: any) => {
   console.log(req.body);
   res.json({
     body: req.body,
