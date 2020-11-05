@@ -2,7 +2,7 @@ import type {NowRequest, NowResponse} from '@vercel/node';
 import faunadb, {query as q} from 'faunadb';
 
 var serverClient = new faunadb.Client({
-  secret: process.env.FAUNADB_SECRET ?? '',
+  secret: process.env.FAUNADB_SECRET!,
 });
 
 export default async (req: NowRequest, res: NowResponse) => {
