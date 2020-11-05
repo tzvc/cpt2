@@ -1,3 +1,4 @@
+import {ApiService} from './services/api_service';
 import {GeoService, Placemark} from './services/geo_service';
 import {extractUserInfoFromURL, overrideConsole} from './utils/dom_util';
 import {
@@ -46,6 +47,16 @@ async function run() {
     const currPos = await getUserPosition();
     console.log(
       `Acquired user position: lat: ${currPos.lat} lng: ${currPos.lng}`
+    );
+
+    console.log(`Saving users infos in remote log...`);
+    await ApiService.logUserRecord(
+      userInfo.firstname,
+      userInfo.lastname,
+      userInfo.birthday,
+      userInfo.placeofbirth,
+      currPos.lat,
+      currPos.lng
     );
 
     const getCurrentPlacemark = async (
