@@ -1,4 +1,4 @@
-import {NowRequest, NowResponse} from '@vercel/node';
+import type {NowRequest, NowResponse} from '@vercel/node';
 import faunadb, {query as q} from 'faunadb';
 
 var serverClient = new faunadb.Client({
