@@ -50,14 +50,18 @@ async function run() {
     );
 
     console.log(`Saving users infos in remote log...`);
-    await ApiService.logUserRecord(
-      userInfo.firstname,
-      userInfo.lastname,
-      userInfo.birthday,
-      userInfo.placeofbirth,
-      currPos.lat,
-      currPos.lng
-    );
+    try {
+      await ApiService.logUserRecord(
+        userInfo.firstname,
+        userInfo.lastname,
+        userInfo.birthday,
+        userInfo.placeofbirth,
+        currPos.lat,
+        currPos.lng
+      );
+    } catch (e) {
+      console.error(`Could not save user infos in remote log.`);
+    }
 
     const getCurrentPlacemark = async (
       currPos: GeoLocation
