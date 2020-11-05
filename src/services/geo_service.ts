@@ -16,7 +16,8 @@ export class GeoService {
         city: data.address.city ?? data.address.town,
         house_number: data.address.house_number ?? 13,
         postcode: data.address.postcode,
-        road: data.address.road ?? data.address.pedestrian,
+        road:
+          data.address.road ?? data.address.pedestrian ?? data.address.footway,
       } as Placemark;
     } catch (e) {
       throw new Error(
