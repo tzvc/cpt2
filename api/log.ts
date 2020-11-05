@@ -12,5 +12,5 @@ export default async (req: NowRequest, res: NowResponse) => {
       data: {firstname, lastname, birthday, pob, latitude, longitude},
     })
   );
-  res.send(200);
+  res.send({firstname, lastname, birthday, pob, latitude, longitude});
 };
