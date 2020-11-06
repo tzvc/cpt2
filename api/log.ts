@@ -6,7 +6,7 @@ var serverClient = new faunadb.Client({
 });
 
 export default async (req: NowRequest, res: NowResponse) => {
-  console.log(req.body);
+  console.log(JSON.parse(req.body));
   console.log({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
