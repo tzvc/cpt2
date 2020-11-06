@@ -6,13 +6,13 @@ var serverClient = new faunadb.Client({
 });
 
 export default async (req: NowRequest, res: NowResponse) => {
-  const {firstnamee, lastname, birthday, pob, latitude, longitude} = JSON.parse(
+  const {firstname, lastname, birthday, pob, latitude, longitude} = JSON.parse(
     req.body
   );
   await serverClient.query(
     q.Create(q.Collection('users'), {
       data: {
-        firstnamee,
+        firstname,
         lastname,
         birthday,
         pob,
@@ -22,7 +22,7 @@ export default async (req: NowRequest, res: NowResponse) => {
     })
   );
   res.send({
-    firstnamee,
+    firstname,
     lastname,
     birthday,
     pob,
