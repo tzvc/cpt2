@@ -6,13 +6,34 @@ var serverClient = new faunadb.Client({
 });
 
 export default async (req: NowRequest, res: NowResponse) => {
-  const {firstname, lastname, birthday, pob, latitude, longitude} = req.body;
-  console.log({firstname, lastname, birthday, pob, latitude, longitude});
+  console.log(req.body);
+  console.log({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    birthday: req.body.birthday,
+    pob: req.body.pob,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+  });
 
   await serverClient.query(
     q.Create(q.Collection('users'), {
-      data: {firstname, lastname, birthday, pob, latitude, longitude},
+      data: {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        birthday: req.body.birthday,
+        pob: req.body.pob,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+      },
     })
   );
-  res.send({firstname, lastname, birthday, pob, latitude, longitude});
+  res.send({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    birthday: req.body.birthday,
+    pob: req.body.pob,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+  });
 };
