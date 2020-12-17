@@ -9,7 +9,7 @@ export class GeoService {
   static reverseGeocode = async (lat: number, lng: number) => {
     try {
       const res = await fetch(
-        `https://us1.locationiq.com/v1/reverse.php?key={process.env.LOCATIONIQ_API_KEY}&lat=${lat}&lon=${lng}&namedetails=1&format=json`
+        `https://us1.locationiq.com/v1/reverse.php?key=${process.env.LOCATIONIQ_API_KEY}&lat=${lat}&lon=${lng}&namedetails=1&format=json`
       );
       const data = await res.json();
       return {
