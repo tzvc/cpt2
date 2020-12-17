@@ -74,7 +74,7 @@ export const generateRandomPoint = (
 };
 
 export const getUserPosition = async (): Promise<GeoLocation> => {
-  const currPos = await new Promise<Position>((resolve, reject) => {
+  const currPos = await new Promise<GeolocationPosition>((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (pos) => resolve(pos),
       (err) =>
